@@ -18,10 +18,11 @@ public class TodoController {
 
 
     // save
-    @GetMapping("/saveItem")
-    public void saveTodoItem(@RequestBody TodoItemForm form){
+    @PutMapping("/saveItem")
+    public TodoItem saveTodoItem(@RequestBody TodoItemForm form){
         TodoItem item = TodoItem.createItem(form.getName());
-        todoService.saveTodoItem(item);
+        TodoItem newItem = todoService.saveTodoItem(item);
+        return newItem;
     }
 
     // list
@@ -42,11 +43,12 @@ public class TodoController {
     // update
 
     // delete
-    @DeleteMapping("/{itemId}")
-    public void todoItemDelete(@PathVariable Long itemId){
-
-        todoService.deleteTodoItem(itemId);
-
+    @DeleteMapping("/delete/{itemId}")
+    public Result<Integer> todoItemDelete(@PathVariable Long itemId){
+        Result<Integer> result = new Result<>();
+        int delResult = todoService.deleteTodoItem(itemId);
+        result.setData(delResult);
+        return result;
     }
 
 

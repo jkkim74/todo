@@ -7,12 +7,14 @@ import com.jkkim.todo.repository.TodoRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.util.StringUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -21,9 +23,9 @@ public class TodoService {
     private final TodoRepository todoRepository;
 
     @Transactional
-    public Long saveTodoItem(TodoItem todoItem){
+    public TodoItem saveTodoItem(TodoItem todoItem){
        TodoItem todo = todoRepository.save(todoItem);
-       return todo.getId();
+       return todo;
     }
 
     public List<TodoItem> todoItemList(ItemSearch itemSearch){
@@ -40,7 +42,15 @@ public class TodoService {
         return result;
     }
 
-    public void deleteTodoItem(Long itemId) {
-
+    @Transactional
+    public int deleteTodoItem(Long itemId) {
+        int result = 0;
+        try {
+            todoRepository.deleteById(itemId);
+            result = 1;
+        }catch (Exception e){
+            log.info("delete exception : {}",e.getMessage());
+        }
+        return result;
     }
 }

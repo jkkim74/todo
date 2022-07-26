@@ -9,7 +9,7 @@ public class TodoItemForm {
 
     private String name;
 
-    public TodoItemForm(String name) {
-        this.name = name;
-    }
+//    public TodoItemForm(String name) {
+//        this.name = name;
+//    }
 }
