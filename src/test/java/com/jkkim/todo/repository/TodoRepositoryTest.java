@@ -62,8 +62,8 @@ public class TodoRepositoryTest {
 
         //when
         TodoItem findItem = todoRepository.findById(saveItem.getId()).get();
-        TodoItemDto dto = new TodoItemDto();
-        dto.setName("item test2222");
+
+        TodoItemDto dto = new TodoItemDto(Long.parseLong("1"),"item test2222",false);
         findItem.modifyItem(dto);
 
         //then

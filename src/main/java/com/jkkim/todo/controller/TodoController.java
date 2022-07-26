@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequestMapping(value = "/item",method = {RequestMethod.GET,RequestMethod.POST})
+@RequestMapping(value = "/items",method = {RequestMethod.GET,RequestMethod.POST})
 @RestController
 @RequiredArgsConstructor
 public class TodoController {
@@ -31,7 +31,7 @@ public class TodoController {
         List<TodoItemDto> itemResult = new ArrayList<>();
         List<TodoItem> todoItems = todoService.todoItemList(itemSearch);
         todoItems.stream().forEach(t -> {
-            TodoItemDto dto = new TodoItemDto(t.getName(),t.getCompleted());
+            TodoItemDto dto = new TodoItemDto(t.getId(),t.getName(),t.getCompleted());
             itemResult.add(dto);
         });
 
@@ -40,6 +40,15 @@ public class TodoController {
     }
 
     // update
+
+    // delete
+    @DeleteMapping("/{itemId}")
+    public void todoItemDelete(@PathVariable Long itemId){
+
+        todoService.deleteTodoItem(itemId);
+
+    }
+
 
 
 
