@@ -7,7 +7,9 @@ import lombok.Setter;
 @Setter
 public class TodoItemForm {
 
+    private Long id;
     private String name;
+    private Boolean completed;
 
 //    public TodoItemForm(String name) {
 //        this.name = name;

@@ -3,6 +3,7 @@ package com.jkkim.todo.service;
 import com.jkkim.todo.domain.ItemSearch;
 import com.jkkim.todo.domain.QTodoItem;
 import com.jkkim.todo.domain.TodoItem;
+import com.jkkim.todo.domain.TodoItemForm;
 import com.jkkim.todo.repository.TodoRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.util.StringUtils;
@@ -13,21 +14,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class TodoService {
 
     private final TodoRepository todoRepository;
 
-    @Transactional
     public TodoItem saveTodoItem(TodoItem todoItem){
        TodoItem todo = todoRepository.save(todoItem);
        return todo;
     }
-
+    @Transactional(readOnly = true)
     public List<TodoItem> todoItemList(ItemSearch itemSearch){
         List<TodoItem> result = new ArrayList<>();
         BooleanBuilder builder = new BooleanBuilder();
@@ -42,7 +43,6 @@ public class TodoService {
         return result;
     }
 
-    @Transactional
     public int deleteTodoItem(Long itemId) {
         int result = 0;
         try {
@@ -50,6 +50,29 @@ public class TodoService {
             result = 1;
         }catch (Exception e){
             log.info("delete exception : {}",e.getMessage());
+        }
+        return result;
+    }
+
+    public int deleteAllTodoItem() {
+        int result = 0;
+        try {
+            todoRepository.deleteAll();
+            result = 1;
+        }catch (Exception e){
+            log.info("delete exception : {}",e.getMessage());
+        }
+        return result;
+    }
+
+    public int updateItem(TodoItemForm form) {
+        int result = 0;
+        try {
+            TodoItem item = todoRepository.findById(form.getId()).get();
+            item.setCompleted(form.getCompleted());
+            result = 1;
+        }catch (Exception e){
+            log.info("update exception : {}",e.getMessage());
         }
         return result;
     }

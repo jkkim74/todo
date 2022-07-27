@@ -51,7 +51,20 @@ public class TodoController {
         return result;
     }
 
+    @DeleteMapping("/delete/all")
+    public Result<Integer> todoItemDeleteAll(){
+        Result<Integer> result = new Result<>();
+        int delResult = todoService.deleteAllTodoItem();
+        result.setData(delResult);
+        return result;
+    }
 
-
+    @PutMapping("/updateItem")
+    public Result<Integer>  updateTodoItem(@RequestBody TodoItemForm form){
+        Result<Integer> result = new Result<>();
+        int delResult = todoService.updateItem(form);
+        result.setData(delResult);
+        return result;
+    }
 
 }
