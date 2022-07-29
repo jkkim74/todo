@@ -5,5 +5,8 @@ import lombok.Setter;
 
 @Getter @Setter
 public class ItemSearch {
-    public String name;
+    private String name;
+    private int offset = 0;
+    private int limit = 10;
+
 }

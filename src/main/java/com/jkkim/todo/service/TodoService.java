@@ -9,6 +9,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,8 @@ public class TodoService {
         if(!StringUtils.isNullOrEmpty(itemSearch.getName())){
             builder.and(item.name.contains(itemSearch.getName()));
         }
-        Iterable<TodoItem> iterItem = todoRepository.findAll(builder);
+        PageRequest pageRequest = PageRequest.of(itemSearch.getOffset(),itemSearch.getLimit());
+        Iterable<TodoItem> iterItem = todoRepository.findAll(builder,pageRequest);
         iterItem.forEach(c -> {
             result.add(c);
         });
