@@ -1,5 +1,6 @@
 package com.jkkim.todo.domain;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
 @Getter
@@ -10,6 +11,7 @@ public class TodoItemDto {
 
     private Boolean completed = false;
 
+    @QueryProjection
     public TodoItemDto(Long id, String name, Boolean completed) {
         this.id = id;
         this.name = name;

@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -30,7 +29,7 @@ public class TodoService {
        return todo;
     }
     @Transactional(readOnly = true)
-    public List<TodoItem> todoItemList(ItemSearch itemSearch){
+    public List<TodoItem> todoItemListByExcutor(ItemSearch itemSearch){
         List<TodoItem> result = new ArrayList<>();
         BooleanBuilder builder = new BooleanBuilder();
         QTodoItem item = QTodoItem.todoItem;

@@ -1,13 +1,13 @@
 package com.jkkim.todo.controller;
 
 import com.jkkim.todo.domain.*;
+import com.jkkim.todo.repository.TodoRepository;
 import com.jkkim.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RequestMapping(value = "/items",method = {RequestMethod.GET,RequestMethod.POST})
 @RestController
@@ -15,6 +15,8 @@ import java.util.List;
 public class TodoController {
 
     private final TodoService todoService;
+
+    private final TodoRepository todoRepository;
 
 
     // save
@@ -26,18 +28,23 @@ public class TodoController {
     }
 
     // list
-    @GetMapping("/list")
-    public Result<List<TodoItemDto>> todoItemList(@ModelAttribute("itemSearch") ItemSearch itemSearch, Model model){
-        Result<List<TodoItemDto>> result = new Result<>();
-        List<TodoItemDto> itemResult = new ArrayList<>();
-        List<TodoItem> todoItems = todoService.todoItemList(itemSearch);
-        todoItems.stream().forEach(t -> {
-            TodoItemDto dto = new TodoItemDto(t.getId(),t.getName(),t.getCompleted());
-            itemResult.add(dto);
-        });
+//    @GetMapping("/list")
+//    public Result<List<TodoItemDto>> todoItemList(@ModelAttribute("itemSearch") ItemSearch itemSearch, Model model){
+//        Result<List<TodoItemDto>> result = new Result<>();
+//        List<TodoItemDto> itemResult = new ArrayList<>();
+//        List<TodoItem> todoItems = todoService.todoItemListByExcutor(itemSearch);
+//        todoItems.stream().forEach(t -> {
+//            TodoItemDto dto = new TodoItemDto(t.getId(),t.getName(),t.getCompleted());
+//            itemResult.add(dto);
+//        });
+//
+//        result.setData(itemResult);
+//        return result;
+//    }
 
-        result.setData(itemResult);
-        return result;
+    @GetMapping("/list")
+    public  Page<TodoItemDto> todoItemList(@ModelAttribute("itemSearch") ItemSearch itemSearch, Pageable pageable, Model model){
+        return todoRepository.findTodoItemByPage(itemSearch, pageable);
     }
 
     // update
