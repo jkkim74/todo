@@ -5,7 +5,7 @@ import com.jkkim.todo.repository.TodoRepository;
 import com.jkkim.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,8 +43,9 @@ public class TodoController {
 //    }
 
     @GetMapping("/list")
-    public  Page<TodoItemDto> todoItemList(@ModelAttribute("itemSearch") ItemSearch itemSearch, Pageable pageable, Model model){
-        return todoRepository.findTodoItemByPage(itemSearch, pageable);
+    public  Page<TodoItemDto> todoItemList(@ModelAttribute("itemSearch") ItemSearch itemSearch, Model model){
+        PageRequest page = PageRequest.of(itemSearch.getOffset(), itemSearch.getLimit());
+        return todoRepository.findTodoItemByPage(itemSearch, page);
     }
 
     // update

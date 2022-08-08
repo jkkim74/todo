@@ -7,6 +7,6 @@ import lombok.Setter;
 public class ItemSearch {
     private String name;
     private int offset = 0;
-    private int limit = 10;
+    private int limit = 0;
 
 }
