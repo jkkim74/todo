@@ -28,6 +28,7 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom{
                         todoItem.name,
                         todoItem.completed
                 )).from(todoItem)
+                .orderBy(todoItem.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();

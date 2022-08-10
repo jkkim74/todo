@@ -36,7 +36,7 @@ public class TodoService {
         if(!StringUtils.isNullOrEmpty(itemSearch.getName())){
             builder.and(item.name.contains(itemSearch.getName()));
         }
-        PageRequest pageRequest = PageRequest.of(itemSearch.getOffset(),itemSearch.getLimit());
+        PageRequest pageRequest = PageRequest.of(itemSearch.getOffset(),itemSearch.getSize());
         Iterable<TodoItem> iterItem = todoRepository.findAll(builder,pageRequest);
         iterItem.forEach(c -> {
             result.add(c);

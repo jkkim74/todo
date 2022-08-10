@@ -4,8 +4,10 @@ import com.jkkim.todo.domain.*;
 import com.jkkim.todo.repository.TodoRepository;
 import com.jkkim.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +20,22 @@ public class TodoController {
 
     private final TodoRepository todoRepository;
 
+    @Value("${paging.size}")
+    private int pagingSize;
+
 
     // save
     @PutMapping("/saveItem")
-    public TodoItem saveTodoItem(@RequestBody TodoItemForm form){
+    public Page<TodoItemDto> saveTodoItem(@RequestBody TodoItemForm form){
         TodoItem item = TodoItem.createItem(form.getName());
         TodoItem newItem = todoService.saveTodoItem(item);
-        return newItem;
+        return getTodItemListsByPage(0);
+    }
+
+    private Page<TodoItemDto> getTodItemListsByPage(int pageNum) {
+        ItemSearch itemSearch = new ItemSearch();
+        PageRequest page = PageRequest.of(pageNum,pagingSize, Sort.by("regDate").descending());
+        return todoRepository.findTodoItemByPage(itemSearch, page);
     }
 
     // list
@@ -44,19 +55,18 @@ public class TodoController {
 
     @GetMapping("/list")
     public  Page<TodoItemDto> todoItemList(@ModelAttribute("itemSearch") ItemSearch itemSearch, Model model){
-        PageRequest page = PageRequest.of(itemSearch.getOffset(), itemSearch.getLimit());
+        PageRequest page = PageRequest.of(itemSearch.getOffset(), itemSearch.getSize(), Sort.by("regDate").descending());
         return todoRepository.findTodoItemByPage(itemSearch, page);
     }
 
     // update
 
     // delete
-    @DeleteMapping("/delete/{itemId}")
-    public Result<Integer> todoItemDelete(@PathVariable Long itemId){
-        Result<Integer> result = new Result<>();
+    @DeleteMapping("/delete/{pageNum}/{itemId}")
+    public Page<TodoItemDto> todoItemDelete(@PathVariable int pageNum,
+                                          @PathVariable Long itemId){
         int delResult = todoService.deleteTodoItem(itemId);
-        result.setData(delResult);
-        return result;
+        return getTodItemListsByPage(pageNum);
     }
 
     @DeleteMapping("/delete/all")

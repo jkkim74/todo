@@ -3,6 +3,7 @@ package com.jkkim.todo.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
@@ -16,6 +17,8 @@ public class TodoItem {
     private String name;
 
     private Boolean completed = false;
+
+    private LocalDateTime regDate = LocalDateTime.now();
 
     public static TodoItem createItem(String name) {
         TodoItem item = new TodoItem();

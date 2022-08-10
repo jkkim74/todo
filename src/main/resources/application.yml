@@ -21,3 +21,6 @@ logging:
     org.hibernate.SQL: debug
 #    org.hibernate.type.descriptor.sql: trace
 
+paging:
+  size: 5
+
