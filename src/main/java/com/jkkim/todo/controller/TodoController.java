@@ -70,11 +70,11 @@ public class TodoController {
     }
 
     @DeleteMapping("/delete/all")
-    public Result<Integer> todoItemDeleteAll(){
+    public Page<TodoItemDto> todoItemDeleteAll(){
         Result<Integer> result = new Result<>();
         int delResult = todoService.deleteAllTodoItem();
         result.setData(delResult);
-        return result;
+        return getTodItemListsByPage(0);
     }
 
     @PutMapping("/updateItem")
